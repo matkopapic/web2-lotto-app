@@ -6,7 +6,7 @@ import storeResults from "./routes/storeResults";
 import closeActiveRound from "./routes/closeRound";
 import createNewRound from "./routes/createNewRound";
 import { auth as auth_oauth2 } from 'express-oauth2-jwt-bearer';
-import getActiveRound from "./routes/getActiveRound";
+import getActiveRoundInfo from "./routes/getActiveRoundInfo";
 
 dotenv.config();
 
@@ -51,7 +51,7 @@ app.get("/test", requiresM2MAuth, (_req: Request, res: Response) => {
     res.status(200).send("M2M flow success")
 })
 
-app.get("/active-round", getActiveRound)
+app.get("/active-round", getActiveRoundInfo)
 
 app.post("/new-round", requiresM2MAuth, createNewRound);
 

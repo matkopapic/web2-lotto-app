@@ -14,7 +14,7 @@ CREATE TABLE ticket (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     round_id UUID NOT NULL,
     document_number VARCHAR(255) NOT NULL,
-    user_id UUID NOT NULL,
+    user_id VARCHAR(255) NOT NULL,
     created_at TIMESTAMP WITHOUT TIME ZONE DEFAULT NOW(),
     CONSTRAINT fk_round FOREIGN KEY (round_id) REFERENCES round(id) ON DELETE CASCADE
 );
