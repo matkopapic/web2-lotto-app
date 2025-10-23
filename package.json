@@ -14,13 +14,17 @@
   "license": "ISC",
   "dependencies": {
     "dotenv": "^16.4.7",
-    "express": "^4.21.2"
+    "express": "^4.21.2",
+    "express-oauth2-jwt-bearer": "^1.7.1",
+    "express-openid-connect": "^2.19.2",
+    "pg": "^8.16.3"
   },
   "devDependencies": {
-    "@types/express": "^5.0.0",
-    "@types/node": "^22.13.10",
+    "@types/express": "^5.0.3",
+    "@types/node": "^22.18.11",
+    "@types/pg": "^8.15.5",
     "nodemon": "^3.1.9",
     "ts-node": "^10.9.2",
-    "typescript": "^5.8.2"
+    "typescript": "^5.9.3"
   }
 }

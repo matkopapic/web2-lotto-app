@@ -1,12 +1,27 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Index Page</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lotto 6/45</title>
+    <link rel="stylesheet" href="./home/home.css">
 </head>
 <body>
-    <h1>Index Page</h1>
-    <button id="btn-make-api-call">Click Me</button>
-    <script src="./dist/home/home.js"></script>
+<div id="top-bar">
+    <div id="user-info">
+        <img id="user-pic" src="" alt="Profile" />
+        <span id="username"></span>
+        <div id="user-dropdown" class="hidden">
+            <p id="account-email"></p>
+            <button id="logout-btn">Logout</button>
+        </div>
+    </div>
+</div>
+
+<main id="main-content">
+    <p id="loading-message">Loading...</p>
+    <!-- Content populated by TS -->
+</main>
+<script src="./dist/home/home.js"></script>
 </body>
 </html>
