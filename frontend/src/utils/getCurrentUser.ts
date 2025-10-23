@@ -1,3 +1,5 @@
+import {config} from "../config.js";
+
 export interface User {
     username: string;
     email: string;
@@ -5,7 +7,7 @@ export interface User {
 }
 
 export async function getCurrentUser(): Promise<User | null> {
-    const baseUrl = process.env.SITE_BASE_URL;
+    const baseUrl = config.BASE_URL;
     try {
         const response = await fetch(`${baseUrl}/me`, {
             method: "GET",

@@ -5,12 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lotto 6/45</title>
     <link rel="stylesheet" href="./home/home.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body>
 <div id="top-bar">
     <div id="user-info">
         <img id="user-pic" src="" alt="Profile" />
         <span id="username"></span>
+        <i class="fa fa-solid fa-caret-down" id="dropdown-indicator-inactive"></i>
+        <i class="fa fa-solid fa-caret-up hidden" id="dropdown-indicator-active"></i>
         <div id="user-dropdown" class="hidden">
             <p id="account-email"></p>
             <button id="logout-btn">Logout</button>
@@ -20,8 +23,7 @@
 
 <main id="main-content">
     <p id="loading-message">Loading...</p>
-    <!-- Content populated by TS -->
 </main>
-<script src="./dist/home/home.js"></script>
+<script type="module" src="./dist/home/home.js"></script>
 </body>
 </html>

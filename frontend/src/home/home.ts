@@ -1,4 +1,4 @@
-import {getCurrentUser, User} from "../utils/getCurrentUser";
+import {getCurrentUser, User} from "../utils/getCurrentUser.js";
 
 let currentUser: User | null = null;
 
@@ -8,6 +8,8 @@ const userPic = document.getElementById("user-pic") as HTMLImageElement;
 const userDropdown = document.getElementById("user-dropdown") as HTMLDivElement;
 const accountEmail = document.getElementById("account-email") as HTMLParagraphElement;
 const logoutBtn = document.getElementById("logout-btn") as HTMLButtonElement;
+const dropdownIndicatorActive = document.getElementById("dropdown-indicator-active") as HTMLDivElement;
+const dropdownIndicatorInactive = document.getElementById("dropdown-indicator-inactive") as HTMLDivElement;
 
 const mainContent = document.getElementById("main-content") as HTMLDivElement;
 
@@ -19,17 +21,15 @@ function renderUser() {
 
         userInfoDiv.addEventListener("click", () => {
             userDropdown.classList.toggle("hidden");
+            dropdownIndicatorInactive.classList.toggle("hidden");
+            dropdownIndicatorActive.classList.toggle("hidden");
         });
 
         logoutBtn.addEventListener("click", () => {
-            currentUser = null;
-            renderUser();
-            renderMain();
+            window.location.href = "/logout";
         });
     } else {
-        usernameSpan.textContent = "";
-        userPic.src = "";
-        userDropdown.classList.add("hidden");
+        userInfoDiv.classList.add("hidden");
     }
 }
 
@@ -38,7 +38,7 @@ function renderMain() {
 
     if (!currentUser) {
         const loginMsg = document.createElement("p");
-        loginMsg.textContent = "Login to continue";
+        loginMsg.innerHTML = '<a href="/login">Login</a> to continue';
         mainContent.appendChild(loginMsg);
         return;
     }
