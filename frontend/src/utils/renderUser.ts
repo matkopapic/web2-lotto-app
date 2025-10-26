@@ -1,4 +1,4 @@
-import {User} from "../models/user";
+import {User} from "../models/user.js";
 
 const userInfoDiv = document.getElementById("user-info") as HTMLDivElement;
 const usernameSpan = document.getElementById("username") as HTMLSpanElement;

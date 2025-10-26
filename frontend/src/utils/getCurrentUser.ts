@@ -1,5 +1,5 @@
-import {config} from "../config.js";
-import {User} from "../models/user";
+import {config} from "../config/config.js";
+import {User} from "../models/user.js";
 
 const baseUrl = config.BASE_URL;
 
