@@ -1,37 +1,13 @@
-import {getCurrentUser, User} from "../utils/getCurrentUser.js";
+import {getCurrentUser} from "../utils/getCurrentUser.js";
+import {User} from "../models/user.js";
+import {renderUser} from "../utils/renderUser.js";
+import {getActiveRound} from "../utils/getActiveRound.js";
+import {RoundInfo} from "../models/roundInfo.js";
 
 let currentUser: User | null = null;
-
-const userInfoDiv = document.getElementById("user-info") as HTMLDivElement;
-const usernameSpan = document.getElementById("username") as HTMLSpanElement;
-const userPic = document.getElementById("user-pic") as HTMLImageElement;
-const userDropdown = document.getElementById("user-dropdown") as HTMLDivElement;
-const accountEmail = document.getElementById("account-email") as HTMLParagraphElement;
-const logoutBtn = document.getElementById("logout-btn") as HTMLButtonElement;
-const dropdownIndicatorActive = document.getElementById("dropdown-indicator-active") as HTMLDivElement;
-const dropdownIndicatorInactive = document.getElementById("dropdown-indicator-inactive") as HTMLDivElement;
+let activeRound: RoundInfo | null = null;
 
 const mainContent = document.getElementById("main-content") as HTMLDivElement;
-
-function renderUser() {
-    if (currentUser) {
-        userPic.src = currentUser.picture;
-        usernameSpan.textContent = currentUser.username;
-        accountEmail.textContent = currentUser.email;
-
-        userInfoDiv.addEventListener("click", () => {
-            userDropdown.classList.toggle("hidden");
-            dropdownIndicatorInactive.classList.toggle("hidden");
-            dropdownIndicatorActive.classList.toggle("hidden");
-        });
-
-        logoutBtn.addEventListener("click", () => {
-            window.location.href = "/logout";
-        });
-    } else {
-        userInfoDiv.classList.add("hidden");
-    }
-}
 
 function renderMain() {
     mainContent.innerHTML = "";
@@ -40,53 +16,112 @@ function renderMain() {
         const loginMsg = document.createElement("p");
         loginMsg.innerHTML = '<a href="/login">Login</a> to continue';
         mainContent.appendChild(loginMsg);
-        return;
+        return
     }
 
-    const form = document.createElement("form");
+    if (!activeRound) {
+        const roundErrorMessage = document.createElement("p");
+        roundErrorMessage.innerHTML = 'There has been error while loading the latest round, please try again';
+        mainContent.appendChild(roundErrorMessage);
+        return
+    }
 
-    const docInput = document.createElement("input");
-    docInput.type = "text";
-    docInput.name = "documentNumber";
-    docInput.placeholder = "Document Number";
-    docInput.required = true;
-    form.appendChild(docInput);
+    const roundStatusMessage = document.createElement("p");
+    roundStatusMessage.classList.add("round-status-message");
+    const createNewTicket = document.createElement("p");
 
-    const numbersInput = document.createElement("input");
-    numbersInput.type = "text";
-    numbersInput.name = "numbers";
-    numbersInput.placeholder = "Enter 6-10 numbers (1-45) separated by commas";
-    numbersInput.required = true;
-    form.appendChild(numbersInput);
+    if (activeRound.drawnAt && activeRound.drawnNumbers) {
+        roundStatusMessage.innerHTML = `
+        <span class="round-status-message-highlight">Round ${activeRound.roundNum} has ended</span> and the numbers have been drawn: <span class="round-status-message-highlight">${activeRound.drawnNumbers}</span></br>
+        Wait until the next round begins to enter a new ticket.
+        `
+    } else if (activeRound.endedAt) {
+        roundStatusMessage.innerHTML = `
+        <span class="round-status-message-highlight">Round ${activeRound.roundNum} has ended</span>, and we are waiting for numbers to be drawn.</br>
+        The drawn numbers will be published here.</br>
+        Wait until the next round begins to enter a new ticket.
+        `
+    } else {
+        roundStatusMessage.innerHTML = `
+        <span class="round-status-message-highlight"> Round ${activeRound.roundNum} is active.</span></br>
+        You can enter tickets at the link below.
+        `
+        createNewTicket.innerHTML = '<a href="/new-ticket">New ticket</a>';
+    }
+    mainContent.appendChild(roundStatusMessage);
+    mainContent.appendChild(createNewTicket);
+    renderTickets(activeRound);
+}
 
-    const submitBtn = document.createElement("button");
-    submitBtn.type = "submit";
-    submitBtn.textContent = "Submit";
-    form.appendChild(submitBtn);
+function renderTickets(roundInfo: RoundInfo) {
+    if (!roundInfo.userTickets) return
+    const ticketListMessage = document.createElement("p");
+    if (roundInfo.userTickets.length == 0) {
+        ticketListMessage.innerHTML = `You haven't entered any ticket for round number ${roundInfo.roundNum}`
+    } else {
+        ticketListMessage.innerHTML = `You have entered ${roundInfo.userTickets.length} tickets for round number ${roundInfo.roundNum}`
+    }
+    mainContent.appendChild(ticketListMessage);
 
-    form.addEventListener("submit", (e) => {
-        e.preventDefault();
-        const doc = docInput.value;
-        const nums = numbersInput.value
-            .split(",")
-            .map((n) => parseInt(n.trim()))
-            .filter((n) => !isNaN(n) && n >= 1 && n <= 45);
+    if (roundInfo.userTickets.length == 0) return
 
-        if (nums.length < 6 || nums.length > 10) {
-            alert("Please enter 6-10 valid numbers between 1 and 45");
-            return;
-        }
+    const tableContainer = document.createElement("div") as HTMLDivElement;
+    tableContainer.classList.add("table-container");
+    tableContainer.innerHTML = `
+        <table>
+            <thead>
+            <tr class="table-headers">
+                <th>Round Number</th>
+                <th>Document Number</th>
+                <th>Numbers</th>
+                <th>Entered At</th>
+                <th>Link</th>
+            </tr>
+            </thead>
+            <tbody>
 
-        console.log({ documentNumber: doc, numbers: nums });
-        alert(`Submitted: ${doc} → [${nums.join(", ")}]`);
-    });
+            </tbody>
+        </table>
+    `
+    const tableBody = tableContainer.querySelector("tbody") as HTMLTableSectionElement;
 
-    mainContent.appendChild(form);
+    roundInfo.userTickets.forEach((ticket) => {
+        const ticketListItem = document.createElement("tr");
+        ticketListItem.innerHTML = `
+            <td>${activeRound?.roundNum}</td>
+            <td>${ticket.documentNum}</td>
+            <td>${ticket.numbers}</td>
+            <td>${formatDate(ticket.createdAt)}</td>
+            <td>
+                <a href="/ticket/${ticket.id}">View</a>
+            </td>
+        `;
+
+        tableBody.appendChild(ticketListItem);
+    })
+
+    mainContent.appendChild(tableContainer);
+}
+
+function formatDate(dateStr: string) {
+    const date = new Date(dateStr);
+
+    return new Intl.DateTimeFormat("en-GB", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: false,
+    }).format(date);
 }
 
 async function init() {
-    currentUser = await getCurrentUser();
-    renderUser();
+    let currentUserPromise = getCurrentUser();
+    let activeRoundPromise = getActiveRound();
+    currentUser = await currentUserPromise;
+    activeRound = await activeRoundPromise;
+    renderUser(currentUser);
     renderMain();
 }
 

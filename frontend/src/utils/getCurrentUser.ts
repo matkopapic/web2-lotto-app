@@ -1,13 +1,9 @@
 import {config} from "../config.js";
+import {User} from "../models/user";
 
-export interface User {
-    username: string;
-    email: string;
-    picture: string;
-}
+const baseUrl = config.BASE_URL;
 
 export async function getCurrentUser(): Promise<User | null> {
-    const baseUrl = config.BASE_URL;
     try {
         const response = await fetch(`${baseUrl}/me`, {
             method: "GET",

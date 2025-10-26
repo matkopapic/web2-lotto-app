@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lotto 6/45</title>
+    <link rel="stylesheet" href="./newTicket/newTicket.css">
+    <link rel="stylesheet" href="./shared/app.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+<div id="top-bar">
+    <div id="user-info" class="hidden">
+        <img id="user-pic" src="" alt="Profile" />
+        <span id="username"></span>
+        <i class="fa fa-solid fa-caret-down" id="dropdown-indicator-inactive"></i>
+        <i class="fa fa-solid fa-caret-up hidden" id="dropdown-indicator-active"></i>
+        <div id="user-dropdown" class="hidden">
+            <p id="account-email"></p>
+            <button id="logout-btn">Logout</button>
+        </div>
+    </div>
+</div>
+
+<main id="main-content">
+    <p id="loading-message">Loading...</p>
+
+    <form id="ticket-form" method="POST">
+        <div class="form-group">
+            <label for="document-number-input">Document Number</label>
+            <input
+                    id="document-number-input"
+                    type="text"
+                    name="documentNumber"
+                    placeholder="Document Number"
+                    required
+            />
+            <div class="error-message hidden" id="document-error"></div>
+        </div>
+
+        <div class="form-group">
+            <label for="numbers-input">Numbers</label>
+            <input
+                    id="numbers-input"
+                    type="text"
+                    name="numbers"
+                    placeholder="Enter 6-10 numbers (1-45) separated by commas"
+                    required
+            />
+            <div class="error-message hidden" id="numbers-error"></div>
+        </div>
+
+        <button type="submit">Submit</button>
+    </form>
+</main>
+<script type="module" src="./dist/newTicket/newTicket.js"></script>
+</body>
+</html>

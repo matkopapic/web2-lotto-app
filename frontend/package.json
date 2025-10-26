@@ -5,8 +5,8 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "vite",
-    "build": "vite build",
+    "dev": "npx tsc --watch",
+    "build": "npx tsc",
     "preview": "vite preview"
   },
   "author": "",

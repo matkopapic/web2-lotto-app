@@ -7,6 +7,7 @@ import closeActiveRound from "./routes/closeRound";
 import createNewRound from "./routes/createNewRound";
 import { auth as auth_oauth2 } from 'express-oauth2-jwt-bearer';
 import getActiveRoundInfo from "./routes/getActiveRoundInfo";
+import createNewTicket from "./routes/createNewTicket";
 
 dotenv.config();
 
@@ -32,6 +33,7 @@ const requiresM2MAuth = auth_oauth2({
 });
 
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 // auth router attaches /login, /logout, and /callback routes to the baseURL
 app.use(auth_oidc(oidcAuthConfig));
@@ -43,6 +45,10 @@ app.get("/", (_req: Request, res: Response) => {
     res.sendFile(publicPath + "/home/home.html")
 });
 
+app.get("/new-ticket", (_req: Request, res: Response) => {
+    res.sendFile(publicPath + "/newTicket/newTicket.html")
+});
+
 app.get("/me", requiresUserAuth(), (req: Request, res: Response) => {
     res.json(req.oidc.user)
 });
@@ -52,6 +58,8 @@ app.get("/test", requiresM2MAuth, (_req: Request, res: Response) => {
 })
 
 app.get("/active-round", getActiveRoundInfo)
+
+app.post("/new-ticket", createNewTicket)
 
 app.post("/new-round", requiresM2MAuth, createNewRound);
 
