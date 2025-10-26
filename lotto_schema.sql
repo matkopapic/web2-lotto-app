@@ -16,5 +16,6 @@ CREATE TABLE ticket (
     document_number VARCHAR(255) NOT NULL,
     user_id VARCHAR(255) NOT NULL,
     created_at TIMESTAMP WITHOUT TIME ZONE DEFAULT NOW(),
+    numbers integer[],
     CONSTRAINT fk_round FOREIGN KEY (round_id) REFERENCES round(id) ON DELETE CASCADE
 );
