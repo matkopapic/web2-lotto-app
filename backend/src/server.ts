@@ -16,8 +16,17 @@ dotenv.config();
 const app: Express = express();
 const port = process.env.PORT || 3000;
 
-const publicPath = path.resolve(__dirname, "../../frontend/src")
-const publicBuildPath = path.resolve(__dirname, "../../frontend/dist")
+let publicPath: string = "";
+let publicBuildPath: string = "";
+
+if (process.env.NODE_ENV != "production") {
+    publicPath = path.resolve(__dirname, "../../frontend/src")
+    publicBuildPath = path.resolve(__dirname, "../../frontend/dist")
+} else {
+    publicPath = path.resolve(__dirname, "../public/src");
+    publicBuildPath = path.resolve(__dirname, "../public/dist");
+}
+
 
 const oidcAuthConfig = {
     authRequired: false,
