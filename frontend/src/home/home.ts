@@ -3,6 +3,7 @@ import {User} from "../models/user.js";
 import {renderUser} from "../utils/renderUser.js";
 import {getActiveRound} from "../utils/getActiveRound.js";
 import {RoundInfo} from "../models/roundInfo.js";
+import {formatDate} from "../utils/formatDate.js";
 
 let currentUser: User | null = null;
 let activeRound: RoundInfo | null = null;
@@ -11,13 +12,6 @@ const mainContent = document.getElementById("main-content") as HTMLDivElement;
 
 function renderMain() {
     mainContent.innerHTML = "";
-
-    if (!currentUser) {
-        const loginMsg = document.createElement("p");
-        loginMsg.innerHTML = '<a href="/login">Login</a> to continue';
-        mainContent.appendChild(loginMsg);
-        return
-    }
 
     if (!activeRound) {
         const roundErrorMessage = document.createElement("p");
@@ -50,6 +44,14 @@ function renderMain() {
     }
     mainContent.appendChild(roundStatusMessage);
     mainContent.appendChild(createNewTicket);
+
+    if (!currentUser) {
+        const loginMsg = document.createElement("p");
+        loginMsg.innerHTML = '<a href="/login">Login</a> to continue';
+        mainContent.appendChild(loginMsg);
+        return
+    }
+
     renderTickets(activeRound);
 }
 
@@ -101,19 +103,6 @@ function renderTickets(roundInfo: RoundInfo) {
     })
 
     mainContent.appendChild(tableContainer);
-}
-
-function formatDate(dateStr: string) {
-    const date = new Date(dateStr);
-
-    return new Intl.DateTimeFormat("en-GB", {
-        day: "2-digit",
-        month: "2-digit",
-        year: "numeric",
-        hour: "2-digit",
-        minute: "2-digit",
-        hour12: false,
-    }).format(date);
 }
 
 async function init() {

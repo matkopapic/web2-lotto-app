@@ -21,6 +21,8 @@ function renderForm() {
         return
     }
 
+    form.classList.remove("hidden");
+
     form.addEventListener("submit", (e) => {
         e.preventDefault();
         const documentNumber = documentNumberInput.value;

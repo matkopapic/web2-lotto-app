@@ -51,15 +51,19 @@ app.get("/new-ticket", (_req: Request, res: Response) => {
     res.sendFile(publicPath + "/newTicket/newTicket.html")
 });
 
+app.get("/ticket/:id", (_req: Request, res: Response) => {
+    res.sendFile(publicPath + "/ticket/ticket.html")
+})
+
 app.get("/active-round", getActiveRoundInfo)
 
-app.get("/me", requiresUserAuth(), (req: Request, res: Response) => {
+app.get("/me", (req: Request, res: Response) => {
     res.json(req.oidc.user)
 });
 
 app.post("/new-ticket", requiresUserAuth(), createNewTicket)
 
-app.get("/ticket/:id", getTicketInfo)
+app.get("/ticket/:id/info", getTicketInfo)
 
 app.get("/ticket/:id/code", ticketQrCode)
 

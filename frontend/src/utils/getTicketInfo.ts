@@ -3,9 +3,9 @@ import {RoundInfo} from "../models/roundInfo.js";
 
 const baseUrl = config.BASE_URL;
 
-export async function getActiveRound(): Promise<RoundInfo | null> {
+export async function getTicketInfo(ticketId: string): Promise<RoundInfo | null> {
     try {
-        const response = await fetch(`${baseUrl}/active-round`, {
+        const response = await fetch(`${baseUrl}/ticket/${ticketId}/info`, {
             method: "GET",
             credentials: "include",
         });
@@ -16,27 +16,21 @@ export async function getActiveRound(): Promise<RoundInfo | null> {
 
         const data = await response.json();
 
-        const roundInfo: RoundInfo = {
+        return {
             roundNum: data.round_num,
             startedAt: data.started_at,
             endedAt: data.ended_at,
             drawnAt: data.drawn_at,
             drawnNumbers: data.drawn_numbers,
-            userTickets: null,
-        };
-
-        if (data.user_tickets) {
-            roundInfo.userTickets = data.user_tickets.map((ticket: any) => ({
+            userTickets: data.user_tickets.map((ticket: any) => ({
                 id: ticket.id,
                 documentNum: ticket.document_number,
                 numbers: ticket.numbers,
                 createdAt: ticket.created_at,
-            }));
-        }
-
-        return roundInfo;
+            }))
+        };
     } catch (error) {
-        console.error("Failed to fetch active round:", error);
+        console.error("Failed to fetch ticket info:", error);
     }
 
     return null;
