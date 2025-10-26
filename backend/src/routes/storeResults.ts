@@ -36,7 +36,7 @@ async function storeResults(req: Request, res: Response) {
                 drawn_at = NOW(), 
                 drawn_numbers = $1 
                 WHERE id = $2 RETURNING *;
-            `, [numbers, notDrawnRounds.rows[0].id]);
+            `, [numbers.sort((a, b) => a - b), notDrawnRounds.rows[0].id]);
         res.status(204).send();
     } catch (error) {
         handleDatabaseError(error, res)

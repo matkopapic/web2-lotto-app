@@ -36,9 +36,9 @@ async function createNewTicket(req: Request, res: Response) {
             INSERT INTO ticket (round_id, document_number, user_id, numbers) 
             VALUES ($1, $2, $3, $4)
             RETURNING *
-        `, [activeRounds.rows[0].id, ticketRequest.documentNumber, user.sub, ticketRequest.numbers])
+        `, [activeRounds.rows[0].id, ticketRequest.documentNumber, user.sub, ticketRequest.numbers.sort((a, b) => a - b)])
 
-        res.status(201).json(insertedTicket.rows[0])
+        res.redirect(`/ticket/${insertedTicket.rows[0].id}`);
     } catch(e) {
         handleDatabaseError(e, res);
     }
