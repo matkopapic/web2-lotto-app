@@ -26,9 +26,9 @@ function populateTicket(roundInfo: RoundInfo | null) {
     if (!roundInfo.endedAt && !roundInfo.drawnAt) {
         roundStatus.innerHTML = "Round is currently ongoing.";
     } else if (roundInfo.endedAt && !roundInfo.drawnAt) {
-        roundStatus.innerHTML = "Round has ended. Draw has not been done yet.";
+        roundStatus.innerHTML = `Round has ended at ${roundInfo.endedAt}. Draw has not been done yet.`;
     } else if (roundInfo.drawnAt) {
-        roundStatus.innerHTML = "Round has been drawn!";
+        roundStatus.innerHTML = `Numbers have been drawn at ${roundInfo.drawnAt}!`;
     }
 
     if (roundInfo.drawnNumbers && roundInfo.drawnNumbers.length > 0) {
