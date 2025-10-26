@@ -1,5 +1,5 @@
 import {RoundInfo} from "../models/roundInfo.js";
-import {config} from "../config/config";
+import {config} from "../config/config.js";
 
 const baseUrl = config.BASE_URL;
 
